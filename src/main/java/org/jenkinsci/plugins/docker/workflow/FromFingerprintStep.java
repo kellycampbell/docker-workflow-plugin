@@ -98,7 +98,12 @@ public class FromFingerprintStep extends AbstractStepImpl {
                             continue;
                         }
                         if (line.startsWith("FROM ")) {
-                            fromImage = line.substring(5);
+                            fromImage = line.substring(5).trim();
+                            // Ignore multi-stage build names, e.g "FROM foo:latest as build"
+                            int space = fromImage.indexOf(' ');
+                            if (space > 0) {
+                                fromImage = fromImage.substring(0, space);
+                            }
                             continue;
                         }
                     }
